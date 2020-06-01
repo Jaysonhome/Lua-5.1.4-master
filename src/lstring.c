@@ -33,14 +33,14 @@ void luaS_resize (lua_State *L, int newsize) {
   for (i=0; i<tb->size; i++) {
     GCObject *p = tb->hash[i];
     while (p) {  /* for each node in the list */
-      GCObject *next = p->gch.next;  /* save next */
+      GCObject *next = p->gch.next;  /* save next */ //next:指向下一个GC链表的成员。
       unsigned int h = gco2ts(p)->hash;
       // 重新计算hash桶索引，这次需要mod新的hash桶大小
       int h1 = lmod(h, newsize);  /* new position */
       lua_assert(cast_int(h%newsize) == lmod(h, newsize));
       p->gch.next = newhash[h1];  /* chain it */
-      newhash[h1] = p;
-      p = next;
+      newhash[h1] = p;//旧数据放到新的桶上面
+      p = next; //p指向下一个（为了遍历）
     }
   }
   luaM_freearray(L, tb->hash, tb->size, TString *);
