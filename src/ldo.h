@@ -18,7 +18,7 @@
     luaD_growstack(L, n); \
   else condhardstacktests(luaD_reallocstack(L, L->stacksize - EXTRA_STACK - 1));
 
-
+//Õ»¶¥µİÔö1¡£ incr ==increase
 #define incr_top(L) {luaD_checkstack(L,1); L->top++;}
 
 #define savestack(L,p)		((char *)(p) - (char *)L->stack)

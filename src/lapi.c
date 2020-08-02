@@ -809,8 +809,8 @@ LUA_API void lua_call (lua_State *L, int nargs, int nresults) {
 ** Execute a protected call.
 */
 struct CallS {  /* data to `f_call' */
-  StkId func;
-  int nresults;
+  StkId func;  //栈元素的idx
+  int nresults;//返回值数量
 };
 
 
@@ -820,7 +820,7 @@ static void f_call (lua_State *L, void *ud) {
 }
 
 
-
+///将产生的字节码放入虚拟机中执行的
 LUA_API int lua_pcall (lua_State *L, int nargs, int nresults, int errfunc) {
   struct CallS c;
   int status;
@@ -835,7 +835,8 @@ LUA_API int lua_pcall (lua_State *L, int nargs, int nresults, int errfunc) {
     api_checkvalidindex(L, o);
     func = savestack(L, o);
   }
-  c.func = L->top - (nargs+1);  /* function to be called */
+  //得到的函数对象指针就是前面f_parser 函数中
+  c.func = L->top - (nargs+1);  /* function to be called */ 
   c.nresults = nresults;
   status = luaD_pcall(L, f_call, &c, savestack(L, c.func), func);
   adjustresults(L, nresults);

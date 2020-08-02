@@ -234,7 +234,7 @@ typedef struct Proto {
   TValue *k;  /* constants used by the function */
   // 存放函数体的opcode
   Instruction *code;
-  // 在这个函数中定义的函数
+  // 在这个函数中定义的函数 ---用数组存放。
   struct Proto **p;  /* functions defined inside the function */
   int *lineinfo;  /* map from opcodes to source lines */
   // 存放局部变量的数组
