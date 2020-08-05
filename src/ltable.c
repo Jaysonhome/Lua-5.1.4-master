@@ -82,15 +82,15 @@ static const Node dummynode_ = {
 /*
 ** hash for lua_Numbers
 */
-// 对数字进行hash
-static Node *hashnum (const Table *t, lua_Number n) {
-  unsigned int a[numints];
-  int i;
-  if (luai_numeq(n, 0))  /* avoid problems with -0 */
-    return gnode(t, 0);
-  memcpy(a, &n, sizeof(a));
-  for (i = 1; i < numints; i++) a[0] += a[i];
-  return hashmod(t, a[0]);
+//根据key寻找在hash中的Node指针_Sub --key是数字
+static Node *hashnum(const Table *t, lua_Number n) {
+	unsigned int a[numints];
+	int i;
+	if (luai_numeq(n, 0))  /* avoid problems with -0 */
+		return gnode(t, 0); //（hash部分）获取第n个桶的node
+	memcpy(a, &n, sizeof(a)); //  数组指针 &n 拷贝给a，
+	for (i = 1; i < numints; i++) a[0] += a[i];
+	return hashmod(t, a[0]); //内部有gnode 函数，获取node指针
 }
 
 
@@ -99,7 +99,7 @@ static Node *hashnum (const Table *t, lua_Number n) {
 ** returns the `main' position of an element in a table (that is, the index
 ** of its hash value)
 */
-// 根据key寻找在hash中的Node
+// 根据key寻找在hash中的Node指针
 static Node *mainposition (const Table *t, const TValue *key) {
   switch (ttype(key)) {
     case LUA_TNUMBER:
